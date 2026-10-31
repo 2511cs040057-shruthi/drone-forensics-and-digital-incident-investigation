@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>MD-DRONE | Forensic Casework</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="MD-DRONE overview">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 4 27 10v12l-11 6L5 22V10l11-6Z"/><path d="m10 13 6-3 6 3-6 3-6-3Zm0 0v7l6 3 6-3v-7M16 16v7"/></svg></span>
+        <span><strong>MD-DRONE</strong><small>FORENSIC PLATFORM</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview"><span class="nav-icon">▦</span>Overview</a>
+        <a class="nav-link" href="#cases"><span class="nav-icon">▤</span>Cases</a>
+        <a class="nav-link" href="#evidence"><span class="nav-icon">◈</span>Evidence</a>
+        <a class="nav-link" href="#analysis"><span class="nav-icon">⌁</span>Flight analysis</a>
+        <a class="nav-link" href="#reports"><span class="nav-icon">▧</span>Reports</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="side-status"><span class="pulse" id="side-pulse"></span><div><b id="side-health">Checking API</b><small id="side-db">Waiting for server</small></div></div>
+        <div class="side-foot">MD-DRONE <span>LOCAL INSTANCE</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar"><div class="crumb">WORKSPACE <span>/</span> <b>OVERVIEW</b></div><div class="top-actions"><span class="local-tag"><i></i> LOCAL ENVIRONMENT</span><button class="icon-button" id="refresh-button" title="Refresh data" aria-label="Refresh data">↻</button><div class="avatar" title="Examiner workspace">EX</div></div></header>
+
+      <section class="page-heading"><div><p class="eyebrow">DIGITAL FORENSICS · CASE MANAGEMENT</p><h1>Investigation overview</h1><p class="subheading">Manage drone evidence, verify integrity, and review flight activity.</p></div><button class="button button-primary" data-open-case>＋ <span>New case</span></button></section>
+
+      <section class="stat-grid" aria-label="Workspace summary">
+        <article class="stat-card"><div class="stat-top"><span>ACTIVE CASES</span><span class="stat-icon blue">▤</span></div><strong id="stat-cases">—</strong><small>Open investigations</small></article>
+        <article class="stat-card"><div class="stat-top"><span>EVIDENCE ITEMS</span><span class="stat-icon violet">◈</span></div><strong id="stat-evidence">—</strong><small>Registered records</small></article>
+        <article class="stat-card"><div class="stat-top"><span>VERIFIED</span><span class="stat-icon green">✓</span></div><strong id="stat-verified">—</strong><small>Integrity status</small></article>
+        <article class="stat-card"><div class="stat-top"><span>REPORTS</span><span class="stat-icon amber">▧</span></div><strong id="stat-reports">—</strong><small>Generated reports</small></article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel case-panel" id="cases">
+          <div class="panel-heading"><div><p class="eyebrow">CASEWORK</p><h2>Recent cases</h2></div><button class="text-button" data-open-case>＋ Create case</button></div>
+          <div class="table-wrap"><table><thead><tr><th>CASE</th><th>EXAMINER</th><th>STATUS</th><th>CREATED</th><th></th></tr></thead><tbody id="cases-table"><tr><td colspan="5" class="empty-cell">Loading cases…</td></tr></tbody></table></div>
+          <div class="panel-foot"><span id="case-count">0 cases</span><button class="quiet-button" id="reload-cases">Refresh list ↻</button></div>
+        </article>
+
+        <article class="panel activity-panel" id="evidence">
+          <div class="panel-heading"><div><p class="eyebrow">EVIDENCE INTAKE</p><h2>Add evidence</h2></div><span class="upload-icon">↑</span></div>
+          <form id="upload-form" class="upload-form">
+            <label for="upload-case">Associated case</label><select id="upload-case" name="case_id" required><option value="">Select a case</option></select>
+            <label class="dropzone" for="evidence-file"><span class="file-icon">↥</span><strong id="file-label">Choose a file to upload</strong><small>Flight logs and supporting evidence · up to 100 MB</small><input id="evidence-file" type="file" required></label>
+            <label class="check-row"><input id="process-flight-log" type="checkbox"><span>Parse this file as a flight log</span></label>
+            <button class="button button-primary full-width" type="submit" id="upload-submit">Upload evidence</button>
+            <div id="upload-message" class="form-message" role="status"></div>
+          </form>
+        </article>
+      </section>
+
+      <section class="panel evidence-panel">
+        <div class="panel-heading"><div><p class="eyebrow">CHAIN OF EVIDENCE</p><h2>Evidence register</h2></div><div class="heading-tools"><select id="evidence-case-filter" aria-label="Filter evidence by case"><option value="">All cases</option></select><button class="quiet-button" id="reload-evidence">Refresh ↻</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>EVIDENCE</th><th>FILE</th><th>CASE</th><th>ADDED</th><th>INTEGRITY</th><th>QUICK ACTIONS</th></tr></thead><tbody id="evidence-table"><tr><td colspan="6" class="empty-cell">Loading evidence…</td></tr></tbody></table></div>
+        <div class="panel-foot"><span id="evidence-count">0 records</span><span class="muted">SHA-256 integrity tracking</span></div>
+      </section>
+
+      <section class="panel analysis-panel" id="analysis">
+        <div class="panel-heading"><div><p class="eyebrow">FLIGHT INTELLIGENCE</p><h2>Evidence analysis</h2></div><div class="evidence-picker"><label for="analysis-evidence">Evidence ID</label><select id="analysis-evidence"><option value="">Select evidence</option></select></div></div>
+        <div class="analysis-tabs" role="tablist"><button class="analysis-tab selected" data-tab="integrity" role="tab">Integrity</button><button class="analysis-tab" data-tab="timeline" role="tab">Timeline</button><button class="analysis-tab" data-tab="gps" role="tab">GPS route</button><button class="analysis-tab" data-tab="anomalies" role="tab">Anomaly review</button><button class="analysis-tab" data-tab="custody" role="tab">Chain of custody</button></div>
+        <div class="analysis-body">
+          <div class="analysis-intro"><div><span class="analysis-kicker" id="analysis-kicker">EVIDENCE INTEGRITY</span><h3 id="analysis-title">Verify the original file</h3><p id="analysis-description">Compare the stored SHA-256 reference with the current evidence file.</p></div><button class="button button-secondary" id="analysis-run">Run verification</button></div>
+          <div class="analysis-result" id="analysis-result"><div class="result-placeholder"><span>⌁</span><p>Select evidence, then run an analysis to see results.</p></div></div>
+        </div>
+      </section>
+
+      <section class="panel reports-panel" id="reports">
+        <div class="panel-heading"><div><p class="eyebrow">DOCUMENTATION</p><h2>Forensic reports</h2></div><div class="heading-tools"><button class="button button-secondary" id="report-generate">Generate report</button><button class="quiet-button" id="reload-reports">Refresh ↻</button></div></div>
+        <div class="table-wrap"><table><thead><tr><th>REPORT</th><th>CASE</th><th>GENERATED</th><th>STATUS</th><th></th></tr></thead><tbody id="reports-table"><tr><td colspan="5" class="empty-cell">Loading reports…</td></tr></tbody></table></div>
+      </section>
+      <footer class="page-footer"><span>MD-DRONE · DIGITAL EVIDENCE INVESTIGATION SYSTEM</span><span>API <b id="footer-api">CHECKING</b></span></footer>
+    </main>
+  </div>
+
+  <dialog id="case-dialog" class="modal">
+    <form id="case-form" method="dialog">
+      <div class="modal-heading"><div><p class="eyebrow">CASE MANAGEMENT</p><h2>Create investigation</h2></div><button class="icon-button close-modal" type="button" aria-label="Close">×</button></div>
+      <label for="case-number">Case number</label><input id="case-number" name="case_number" required maxlength="50" placeholder="e.g. DF-2026-014">
+      <label for="case-title">Case title</label><input id="case-title" name="case_title" required maxlength="255" placeholder="Investigation title">
+      <label for="case-examiner">Examiner</label><input id="case-examiner" name="examiner_name" maxlength="150" placeholder="Examiner name">
+      <label for="case-description">Description</label><textarea id="case-description" name="description" rows="3" placeholder="Brief case summary"></textarea>
+      <div class="modal-actions"><button class="button button-secondary close-modal" type="button">Cancel</button><button class="button button-primary" type="submit">Create case</button></div>
+      <div id="case-message" class="form-message" role="status"></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

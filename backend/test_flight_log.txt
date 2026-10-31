@@ -1,0 +1,6 @@
+Drone: TestDrone
+Flight ID: TEST-001
+Timestamp,Latitude,Longitude,Altitude,Speed
+2026-10-09 10:00:00,17.3850,78.4867,50,10
+2026-10-09 10:01:00,17.3855,78.4872,75,12
+2026-10-09 10:02:00,17.3860,78.4878,100,15

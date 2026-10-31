@@ -1,0 +1,5 @@
+Flask>=3.1,<4
+Flask-Cors>=6,<7
+SQLAlchemy>=2.0,<3
+mysql-connector-python>=9.0,<10
+pymavlink>=2.4,<3

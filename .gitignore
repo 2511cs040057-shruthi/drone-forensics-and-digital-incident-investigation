@@ -1,0 +1,29 @@
+.venv/
+**/__pycache__/
+backend/instance/*.sqlite3
+frontend/node_modules/
+frontend/dist/
+
+# Local reports, test outputs, and historical source snapshots
+*.pdf
+backend/*backup*
+backend/*.before_*
+backend/* - Copy.py
+backend/md_drone_*_test.*
+backend/md_drone_test_image.png
+backend/*_test_copy.txt
+backend/*upload_test*.txt
+backend/*flight_log_test.txt
+backend/test_evidence_*.bin
+
+# Local environments and generated runtime data
+venv/
+**/venv/
+backend/instance/
+backend/evidence/
+backend/media/
+backend/reports/
+frontend/node_modules/
+frontend/dist/
+backend/*_before_*
+frontend/*backup*
